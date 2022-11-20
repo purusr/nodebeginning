@@ -16,9 +16,16 @@ app.get('/', (req,res)=>{
 
 app.get('/createstudent', async(req,res)=>{
   
-
-    await new Student({roll:1, name: 'kunal', department: 'BCA',contact: 1234,identity:'M'})
-
+   const user = new Student({roll:1, name: 'kunal', department: 'BCA',contact: 1234,identity:'M'})
+   try {
+    await user.save()
+    console.log('student added')
+    const std = Student.find();
+    res.json(std);
+   }catch(error){
+    console.log('Student not created')
+    res.send('error')
+   }
 })
 
 
