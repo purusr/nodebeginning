@@ -5,23 +5,26 @@ import Student from './studentmodel.js';
 mongoose.connect('mongodb+srv://krish-node:Krishna8686@cluster0.emvic.mongodb.net/?retryWrites=true&w=majority',{ useNewUrlParser: true, useUnifiedTopology: true})
 .then(()=> console.log('DB connected'))
 .catch((error)=> console.log('DB has connection error'));
-
 const app = express();
 
+app.use((express.json()))
+app.use((express.urlencoded({extended: true})))
 
 app.get('/', (req,res)=>{
   res.send('Server is live')
 })
 
 
-app.get('/createstudent', async(req,res)=>{
+app.post('/createstudent', async(req,res)=>{
+
+    const {roll,department,contact,name,identity} = req.body;
+    console.log(req.body)
   
-   const user = new Student({roll:1, name: 'kunal', department: 'BCA',contact: 1234,identity:'M'})
+   const user = new Student({roll:roll, name: name, department: department,contact:contact,identity:identity})
    try {
     await user.save()
     console.log('student added')
-    const std = Student.find();
-    res.json(std);
+    res.send('Success');
    }catch(error){
     console.log('Student not created')
     res.send('error')
